@@ -26,6 +26,7 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 20px 48px; }
 .tag.urgent { background: #fee2e2; color: var(--urgent); font-weight: 600; }
 
 .form-box { max-width: 520px; }
+.form-box label { display: block; }
 .form-box input, .form-box select, .form-box textarea { width: 100%; padding: 9px 10px; font: inherit; font-size: 16px; border: 1px solid var(--line); border-radius: 6px; background: #fff; margin: 4px 0 14px; }
 .actions { margin-top: 8px; }
 .btn { display: inline-block; background: var(--accent); color: #fff; text-decoration: none; padding: 10px 18px; border: 0; border-radius: 6px; font: inherit; cursor: pointer; }
