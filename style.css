@@ -38,3 +38,8 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 20px 48px; }
   .toolbar { flex-direction: column; align-items: stretch; }
   .cards { grid-template-columns: 1fr; }
 }
+
+.holidays { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); }
+.holidays .btn:disabled { opacity: 0.6; cursor: wait; }
+.holiday-list { margin: 8px 0 0; padding-left: 20px; }
+.holiday-list time { font-weight: 600; }
