@@ -79,7 +79,7 @@ async function loadHolidays() {
     }
     const holidays = await response.json();
     const today = todayISO();
-    const upcoming = holidays.filter((h) => h.date > today).slice(0, 3);
+    const upcoming = holidays.filter((h) => h.date > today).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 3);
     renderHolidays(upcoming);
     holidaysStatus.textContent = upcoming.length > 0 ? "" : "До кінця року свят більше немає.";
   } catch (err) {
