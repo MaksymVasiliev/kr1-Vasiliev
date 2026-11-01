@@ -34,9 +34,59 @@ function render(items) {
 
 function applyFilter() {
   const value = select.value;
-  const filtered = value === "all" ? announcements : announcements.filter((a) => a.category === value);
+  const filtered = value === "all" ? announcements : announcements.filter((a) => a.category.toLowerCase() === value);
   render(filtered);
 }
 
 select.addEventListener("change", applyFilter);
 render(announcements);
+
+const holidaysBtn = document.querySelector("#holidays-btn");
+const holidaysStatus = document.querySelector("#holidays-status");
+const holidaysList = document.querySelector("#holidays-list");
+
+function todayISO() {
+  const d = new Date();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${mm}-${dd}`;
+}
+
+function renderHolidays(items) {
+  holidaysList.textContent = "";
+  for (const h of items) {
+    const li = document.createElement("li");
+    const date = document.createElement("time");
+    date.dateTime = h.date;
+    date.textContent = h.date;
+    const name = document.createElement("span");
+    name.textContent = h.localName;
+    li.append(date, " — ", name);
+    holidaysList.append(li);
+  }
+}
+
+async function loadHolidays() {
+  const year = new Date().getFullYear();
+  const url = `https://date.nager.at/api/v3/PublicHolidays/${year}/UA`;
+  holidaysBtn.disabled = true;
+  holidaysStatus.textContent = "Завантажую…";
+  holidaysList.textContent = "";
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`сервер відповів ${response.status}`);
+    }
+    const holidays = await response.json();
+    const today = todayISO();
+    const upcoming = holidays.filter((h) => h.date > today).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 3);
+    renderHolidays(upcoming);
+    holidaysStatus.textContent = upcoming.length > 0 ? "" : "До кінця року свят більше немає.";
+  } catch (err) {
+    holidaysStatus.textContent = `Не вдалося завантажити свята (${err.message}). Перевірте з'єднання і спробуйте ще раз.`;
+  } finally {
+    holidaysBtn.disabled = false;
+  }
+}
+
+holidaysBtn.addEventListener("click", loadHolidays);
